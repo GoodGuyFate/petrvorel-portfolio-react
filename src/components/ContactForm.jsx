@@ -1,20 +1,34 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 function ContactForm() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!name || !email || !message) {
-      alert('Please fill in all fields')
-      return
+      alert("Please fill in all fields");
+      return;
     }
-    console.log('Contact form submitted:', { name, email, message })
-    alert("Thanks for your message! Petr will be in touch soon.")
-    setName('')
-    setEmail('')
-    setMessage('')
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (response.ok) {
+        alert("Thanks for your message! Petr will be in touch soon.");
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
   }
 
   return (
@@ -44,9 +58,11 @@ function ContactForm() {
           onChange={(e) => setMessage(e.target.value)}
         />
       </div>
-      <button className='contact-send-btn' onClick={handleSubmit}>Send</button>
+      <button className="contact-send-btn" onClick={handleSubmit}>
+        Send
+      </button>
     </div>
-  )
+  );
 }
 
-export default ContactForm
+export default ContactForm;

@@ -10,10 +10,9 @@ function Stage({ currentView, currentAlbum, activeIndex, setActiveIndex }) {
           <img
             src="/images/background.webp"
             alt=""
-            fetchpriority="high"
+            fetchPriority="high"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
-          <div className="monogram">PV</div>
         </div>
       </div>
 

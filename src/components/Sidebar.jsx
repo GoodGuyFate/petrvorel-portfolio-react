@@ -4,6 +4,8 @@ import ThumbnailGrid from "./ThumbnailGrid";
 import AboutContent from "./AboutContent";
 import ContactForm from "./ContactForm";
 
+const FINE_ART_ALBUM_ID = "72177720333063653";
+
 function Sidebar({
   currentView,
   setCurrentView,
@@ -15,8 +17,8 @@ function Sidebar({
   setActiveIndex,
   albums,
   setAlbums,
-  photoCache, 
-  setPhotoCache
+  photoCache,
+  setPhotoCache,
 }) {
   function goBack() {
     setCurrentView("landing");
@@ -68,20 +70,6 @@ function Sidebar({
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
               </svg>
             </a>
-            <a
-              href="https://www.deviantart.com/pjc"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="DeviantArt"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M19.207 2.604L17.5 4.31l.463.925H14.29L13.5 6H12v.5L10.395 8H7.5v7l2.895 1.5L8.5 19H6.793l-1.706 1.706.707.707L7.5 20.118V21h9v-.882l1.706-1.705-.707-.707L15.793 19H14.5l-1.895-2.5 2.895-1.5V8H12.5l-.5-1.5h-2.69l.463-.925L8.066 4.31 8.793 3.5H15.5V3h3.207l.5-.896zM9 9h6v5.5L12 16l-3-1.5z" />
-              </svg>
-            </a>
           </div>
         </div>
 
@@ -99,9 +87,26 @@ function Sidebar({
           <a
             href="#"
             className={activeNav === "paintings" ? "active" : ""}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
               setActiveNav("paintings");
+
+              if (photoCache[FINE_ART_ALBUM_ID]) {
+                setCurrentAlbum(photoCache[FINE_ART_ALBUM_ID]);
+                setCurrentView("album");
+                return;
+              }
+
+              try {
+                const response = await fetch(
+                  `/api/photos?albumId=${FINE_ART_ALBUM_ID}`,
+                );
+                const data = await response.json();
+                setCurrentAlbum(data.photoset.photo);
+                setCurrentView("album");
+              } catch (err) {
+                console.error("Failed to load paintings:", err);
+              }
             }}
           >
             Paintings

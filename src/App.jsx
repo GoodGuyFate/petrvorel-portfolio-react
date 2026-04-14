@@ -16,6 +16,8 @@ function useIsMobile() {
 function scrollSheetToTop() {
   const el = document.querySelector(".mobile-sheet-inner");
   if (el) el.scrollTop = 0;
+  const sidebar = document.querySelector(".sidebar");
+  if (sidebar) sidebar.scrollTop = 0;
 }
 
 function App() {

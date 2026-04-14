@@ -2,10 +2,13 @@ import { lazy, Suspense } from 'react'
 
 const AlbumView = lazy(() => import('./AlbumView'))
 
-function Stage({ currentView, currentAlbum, activeIndex, setActiveIndex }) {
+function Stage({ currentView, currentAlbum, activeIndex, setActiveIndex, isPaintings }) {
+  // paintings-preview keeps the hero visible (same as landing)
+  const showHero = currentView === 'landing' || currentView === 'paintings-preview'
+
   return (
     <main className="stage">
-      <div className={`landing-view ${currentView === 'landing' ? 'active' : ''}`}>
+      <div className={`landing-view ${showHero ? 'active' : ''}`}>
         <div className="hero">
           <img
             src="/images/background.webp"
@@ -22,6 +25,7 @@ function Stage({ currentView, currentAlbum, activeIndex, setActiveIndex }) {
             currentAlbum={currentAlbum}
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
+            isPaintings={isPaintings}
           />
         </Suspense>
       </div>

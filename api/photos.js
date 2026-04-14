@@ -9,7 +9,10 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&photoset_id=${albumId}&user_id=${userId}&api_key=${apiKey}&extras=url_b,title,description&format=json&nojsoncallback=1`
+      `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos` +
+      `&photoset_id=${albumId}&user_id=${userId}&api_key=${apiKey}` +
+      `&extras=url_z,url_c,url_b,url_h,url_k,title,description` +
+      `&format=json&nojsoncallback=1`
     )
     const data = await response.json()
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')

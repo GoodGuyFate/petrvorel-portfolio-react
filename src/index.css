@@ -446,28 +446,34 @@ nav a.active {
      caption near the bottom of the stage but above the sheet. */
   .swiper-caption {
     position: absolute;
-    bottom: 1rem;
+    top: 0;
+    bottom: auto;
     left: 0;
     right: 0;
     text-align: center;
     padding: 0 1rem;
     z-index: 5;
-    /* Subtle scrim so text is readable over any image */
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55) 40%);
-    padding-top: 2rem;
-    padding-bottom: 0.75rem;
+    
+    padding: 1.5rem 1rem 1rem 1rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.65) 40%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   #photo-title {
     font-size: 0.9rem;
+    order: 1; /* Title first */
   }
 
   #photo-subtitle {
     font-size: 0.8rem;
+    order: 2; /* Description second */
   }
 
   #photo-counter {
     font-size: 0.8rem;
+    order: 3; /* Counter last in the top stack */
   }
 }
 

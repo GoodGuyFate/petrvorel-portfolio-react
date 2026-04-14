@@ -17,7 +17,7 @@ A minimalist photography and painting portfolio for artist Petr Vorel, built wit
 - Swiper.js for touch/keyboard navigation
 - Flickr API via Vercel serverless functions (API key never exposed to client)
 - Vercel for hosting and deployment
-- Resend API for contact form
+- Resend API for contact form.
 
 
 Link: https://www.petrvorel.com/

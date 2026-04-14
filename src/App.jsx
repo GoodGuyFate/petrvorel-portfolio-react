@@ -43,7 +43,7 @@ function App() {
 
       if (viewHistory.length > 0) {
         const prev = viewHistory[viewHistory.length - 1];
-        setViewHistory(h => h.slice(0, -1));
+        setViewHistory((h) => h.slice(0, -1));
         // Restore previous state
         setCurrentView(prev.view);
         setActiveNav(prev.activeNav);
@@ -61,7 +61,10 @@ function App() {
 
   // Wrap setCurrentView to record history
   function navigateTo(view, nav, paintings, album = null) {
-    setViewHistory(h => [...h, { view: currentView, activeNav, isPaintings }]);
+    setViewHistory((h) => [
+      ...h,
+      { view: currentView, activeNav, isPaintings },
+    ]);
     setCurrentView(view);
     if (nav !== undefined) setActiveNav(nav);
     if (paintings !== undefined) setIsPaintings(paintings);
@@ -111,7 +114,7 @@ function App() {
         isPaintings={isPaintings}
       />
       {isMobile ? (
-        <MobileSheet>
+        <MobileSheet currentView={currentView} activeIndex={activeIndex}>
           <Sidebar {...sidebarProps} />
         </MobileSheet>
       ) : (

@@ -7,10 +7,15 @@ function buildFlickrImageUrl(farm, server, id, secret, size = "b") {
 }
 
 function AlbumList({
-  setCurrentView, setCurrentAlbum,
-  activeNav, albums, setAlbums,
-  photoCache, setPhotoCache,
-  setIsPaintings, navigateTo,
+  setCurrentView,
+  setCurrentAlbum,
+  activeNav,
+  albums,
+  setAlbums,
+  photoCache,
+  setPhotoCache,
+  setIsPaintings,
+  navigateTo,
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,11 +29,14 @@ function AlbumList({
         const data = await response.json();
         setAlbums(data.collections);
         fetch(`/api/photos?albumId=${FINE_ART_ALBUM_ID}`)
-          .then(r => r.json())
-          .then(data => {
-            setPhotoCache(prev => ({ ...prev, [FINE_ART_ALBUM_ID]: data.photoset.photo }));
+          .then((r) => r.json())
+          .then((data) => {
+            setPhotoCache((prev) => ({
+              ...prev,
+              [FINE_ART_ALBUM_ID]: data.photoset.photo,
+            }));
           })
-          .catch(err => console.error("Failed to preload Fine Art:", err));
+          .catch((err) => console.error("Failed to preload Fine Art:", err));
       } catch (err) {
         setError("Failed to load albums.");
         console.error(err);
@@ -44,7 +52,7 @@ function AlbumList({
     try {
       const r = await fetch(`/api/photos?albumId=${albumId}`);
       const data = await r.json();
-      setPhotoCache(prev => ({ ...prev, [albumId]: data.photoset.photo }));
+      setPhotoCache((prev) => ({ ...prev, [albumId]: data.photoset.photo }));
     } catch (err) {
       console.error(`Failed to preload album ${albumId}`, err);
     }
@@ -57,7 +65,7 @@ function AlbumList({
         const r = await fetch(`/api/photos?albumId=${albumId}`);
         const data = await r.json();
         photos = data.photoset.photo;
-        setPhotoCache(prev => ({ ...prev, [albumId]: photos }));
+        setPhotoCache((prev) => ({ ...prev, [albumId]: photos }));
       } catch (err) {
         console.error("Failed to load photos:", err);
         return;
@@ -67,10 +75,14 @@ function AlbumList({
     navigateTo("album", "photography", false);
   }
 
-  if (loading) return (
-    <p style={{ color: "#aaa", fontSize: "0.85rem", marginTop: "1.5rem" }}>Loading albums...</p>
-  );
-  if (error) return <p style={{ color: "#aaa", marginTop: "1.5rem" }}>{error}</p>;
+  if (loading)
+    return (
+      <p style={{ color: "#aaa", fontSize: "0.85rem", marginTop: "1.5rem" }}>
+        Loading albums...
+      </p>
+    );
+  if (error)
+    return <p style={{ color: "#aaa", marginTop: "1.5rem" }}>{error}</p>;
 
   return (
     <div className="album-list">
@@ -86,7 +98,13 @@ function AlbumList({
             >
               {album.cover && (
                 <img
-                  src={buildFlickrImageUrl(album.cover.farm, album.cover.server, album.cover.primary, album.cover.secret, "q")}
+                  src={buildFlickrImageUrl(
+                    album.cover.farm,
+                    album.cover.server,
+                    album.cover.primary,
+                    album.cover.secret,
+                    "q",
+                  )}
                   alt={album.title}
                 />
               )}

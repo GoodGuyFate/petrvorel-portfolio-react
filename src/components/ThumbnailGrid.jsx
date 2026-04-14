@@ -1,6 +1,6 @@
 function ThumbnailGrid({ photos, activeIndex, onThumbnailClick }) {
-  function buildFlickrImageUrl(farm, server, id, secret, size = 'b') {
-    return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_${size}.jpg`
+  function buildFlickrImageUrl(farm, server, id, secret, size = "b") {
+    return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_${size}.jpg`;
   }
 
   return (
@@ -8,14 +8,20 @@ function ThumbnailGrid({ photos, activeIndex, onThumbnailClick }) {
       {photos.map((photo, index) => (
         <img
           key={photo.id}
-          src={buildFlickrImageUrl(photo.farm, photo.server, photo.id, photo.secret, 'q')}
+          src={buildFlickrImageUrl(
+            photo.farm,
+            photo.server,
+            photo.id,
+            photo.secret,
+            "q",
+          )}
           alt={photo.title}
-          className={activeIndex === index ? 'active' : ''}
+          className={activeIndex === index ? "active" : ""}
           onClick={() => onThumbnailClick(index)}
         />
       ))}
     </div>
-  )
+  );
 }
 
-export default ThumbnailGrid
+export default ThumbnailGrid;

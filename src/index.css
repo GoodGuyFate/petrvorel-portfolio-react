@@ -529,9 +529,9 @@ nav a.active {
   }
 
   .mobile-sheet-pill {
-    width: 36px;
+    width: 76px;
     height: 4px;
-    background: #666;
+    background: #787878;
     border-radius: 2px;
     transition: background 0.2s;
   }

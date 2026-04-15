@@ -1,0 +1,215 @@
+/* ─────────────────────────────────────────────
+   MOBILE LAYOUT  (max-width: 767px)
+   Replaces the bottom-sheet approach entirely.
+   Layout: fixed header → hero image → scrollable content
+───────────────────────────────────────────── */
+
+/* Hide/show helpers */
+.desktop-only { display: block; }
+.mobile-only  { display: none; }
+
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+  .mobile-only  { display: block !important; }
+
+  body {
+    overflow-x: hidden;
+    overflow-y: auto; /* page scrolls normally */
+    background-color: #333333;
+  }
+
+  /* Root wrapper — full-width column */
+  .mobile-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  /* ── Fixed top header ── */
+  .mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    height: 52px;
+    background-color: #333333;
+    border-bottom: 1px solid #444;
+    flex-shrink: 0;
+  }
+
+  .mobile-header-left {
+    width: 64px; /* fixed width to keep title centered */
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-header-spacer {
+    width: 64px;
+  }
+
+  .mobile-back-btn {
+    background: none;
+    border: none;
+    color: #fcc001;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    padding: 0;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+  .mobile-back-btn:hover { color: #fcc001; }
+
+  .mobile-header-title {
+    font-family: "Cinzel", sans-serif;
+    font-weight: normal;
+    font-size: 1.25rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    flex: 1;
+  }
+  .mobile-header-title a {
+    color: #fcc001;
+    text-decoration: none;
+  }
+
+  .mobile-header-right {
+    width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .mobile-social-link {
+    color: #fcc001;
+    opacity: 0.75;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s;
+  }
+  .mobile-social-link:hover { opacity: 1; }
+  .mobile-social-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ── Hero image block ── */
+  .mobile-hero {
+    width: 100%;
+    height: 52vw; /* ~16:9-ish, feels generous */
+    min-height: 200px;
+    max-height: 340px;
+    background-color: #2a2a2a;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .mobile-hero img,
+  .mobile-hero-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Scrollable content below hero ── */
+  .mobile-content {
+    flex: 1;
+    background-color: #333333;
+  }
+
+  /* Sidebar inside mobile-content: reset all desktop sizing */
+  .mobile-content .sidebar {
+    width: 100% !important;
+    min-height: unset !important;
+    border: none !important;
+    padding: 0 1rem 3rem !important;
+    background-color: transparent !important;
+  }
+
+  /* Mobile nav — horizontal row */
+  .mobile-only nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #787878;
+    margin-top: 0;
+  }
+
+  /* ── Full-screen album viewer ── */
+  .mobile-album-view {
+    width: 100%;
+    height: calc(100vh - 52px);
+    background-color: #2a2a2a;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Swiper takes all space except caption row */
+  .mobile-album-view .swiper {
+    flex: 1;
+    width: 100%;
+    min-height: 0; /* allow flex shrink */
+  }
+
+  .mobile-album-view .swiper-slide {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+  }
+
+  .mobile-album-view .swiper-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block;
+  }
+
+  /* Caption pulled OUT of absolute positioning — sits below swiper */
+  .mobile-album-view .swiper-caption {
+    position: static !important;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.6rem 1.5rem 1rem;
+    background: transparent;
+    text-align: center;
+  }
+
+  .mobile-album-view #photo-title {
+    font-size: 0.9rem;
+    color: #ffffff;
+  }
+
+  .mobile-album-view #photo-subtitle {
+    font-size: 0.8rem;
+    color: #cccccc;
+  }
+
+  .mobile-album-view #photo-counter {
+    font-size: 0.8rem;
+    color: #aaaaaa;
+  }
+
+  /* Hide old mobile sheet entirely if it ever renders */
+  .mobile-sheet { display: none !important; }
+
+  /* Stage is unused on mobile — hide it */
+  .container { display: none !important; }
+}

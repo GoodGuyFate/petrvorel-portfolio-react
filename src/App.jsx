@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Stage from "./components/Stage";
 import Sidebar from "./components/Sidebar";
-import MobileSheet from "./components/MobileSheet";
+import MobileLayout from "./components/MobileLayout";
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -13,11 +13,14 @@ function useIsMobile() {
   return isMobile;
 }
 
-function scrollSheetToTop() {
-  const el = document.querySelector(".mobile-sheet-inner");
-  if (el) el.scrollTop = 0;
+function scrollToTop() {
+  window.scrollTo({ top: 0 });
+  // desktop sidebar scroll
   const sidebar = document.querySelector(".sidebar");
   if (sidebar) sidebar.scrollTop = 0;
+  // mobile content scroll
+  const mobileContent = document.querySelector(".mobile-content");
+  if (mobileContent) mobileContent.scrollTop = 0;
 }
 
 function App() {
@@ -31,37 +34,30 @@ function App() {
   const [viewHistory, setViewHistory] = useState([]);
   const isMobile = useIsMobile();
 
-  // Push a fake history entry so browser back button fires popstate
-  // instead of navigating away from the site
   useEffect(() => {
     window.history.pushState({ view: "paintings-preview" }, "");
   }, []);
 
-  // Intercept browser back button — navigate within the app instead
   useEffect(() => {
     function handlePopState() {
-      // Always push a new state so we never run out of history entries
       window.history.pushState({ view: currentView }, "");
 
       if (viewHistory.length > 0) {
         const prev = viewHistory[viewHistory.length - 1];
         setViewHistory((h) => h.slice(0, -1));
-        // Restore previous state
         setCurrentView(prev.view);
         setActiveNav(prev.activeNav);
         setIsPaintings(prev.isPaintings);
         if (prev.view !== "album") {
           setCurrentAlbum(null);
         }
-        scrollSheetToTop();
+        scrollToTop();
       }
-      // If no history, we're already at the root — do nothing (stay on site)
     }
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, [viewHistory, currentView]);
 
-  // Wrap setCurrentView to record history
   function navigateTo(view, nav, paintings, album = null) {
     setViewHistory((h) => [
       ...h,
@@ -74,18 +70,18 @@ function App() {
       setCurrentAlbum(album);
       setActiveIndex(0);
     }
-    scrollSheetToTop();
+    scrollToTop();
     window.history.pushState({ view }, "");
   }
 
   function handleSetCurrentAlbum(photos) {
     setCurrentAlbum(photos);
     setActiveIndex(0);
-    scrollSheetToTop();
+    scrollToTop();
   }
 
   useEffect(() => {
-    scrollSheetToTop();
+    scrollToTop();
   }, [currentView]);
 
   const sidebarProps = {
@@ -106,6 +102,22 @@ function App() {
     navigateTo,
   };
 
+  if (isMobile) {
+    return (
+      <MobileLayout
+        currentView={currentView}
+        currentAlbum={currentAlbum}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+        isPaintings={isPaintings}
+        navigateTo={navigateTo}
+        activeNav={activeNav}
+      >
+        <Sidebar {...sidebarProps} />
+      </MobileLayout>
+    );
+  }
+
   return (
     <div className="container">
       <Stage
@@ -115,13 +127,7 @@ function App() {
         setActiveIndex={setActiveIndex}
         isPaintings={isPaintings}
       />
-      {isMobile ? (
-        <MobileSheet currentView={currentView} activeIndex={activeIndex}>
-          <Sidebar {...sidebarProps} />
-        </MobileSheet>
-      ) : (
-        <Sidebar {...sidebarProps} />
-      )}
+      <Sidebar {...sidebarProps} />
     </div>
   );
 }

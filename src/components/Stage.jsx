@@ -43,9 +43,16 @@ function Stage({
       </div>
 
       <div className={`about-view ${currentView === "about" ? "active" : ""}`}>
-        <div
-          className="about-hero"
-          style={{ backgroundImage: "url(/images/background-about.webp)" }}
+        <img
+          src="/images/background-about.webp"
+          alt="Petr Vorel"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            objectPosition: "center",
+            display: "block",
+          }}
         />
       </div>
 

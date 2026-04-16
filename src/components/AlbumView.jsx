@@ -122,15 +122,22 @@ function AlbumView({
     );
   }
 
-  // Desktop: original layout with absolute caption
+  // Desktop: flex column so caption is always below the image, never overlapping
   return (
-    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Swiper
         initialSlide={activeIndex}
         modules={[Keyboard]}
         keyboard={{ enabled: true }}
         speed={800}
-        style={{ width: "100%", height: "100%" }}
+        style={{ flex: 1, width: "100%", minHeight: 0 }}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => {
           setActiveIndex(swiper.activeIndex);
@@ -156,7 +163,7 @@ function AlbumView({
                 loading={index === 0 ? "eager" : "lazy"}
                 style={{
                   maxWidth: "100%",
-                  maxHeight: "80dvh",
+                  maxHeight: "100%",
                   objectFit: "contain",
                 }}
               />
@@ -165,7 +172,14 @@ function AlbumView({
         ))}
       </Swiper>
 
-      <div className="swiper-caption">
+      <div
+        className="swiper-caption"
+        style={{
+          position: "static",
+          padding: "0.6rem 2rem 1.5rem",
+          flexShrink: 0,
+        }}
+      >
         {isPaintings && title && <span id="photo-title">{title}</span>}
         {isPaintings && description && (
           <span id="photo-subtitle">{description}</span>

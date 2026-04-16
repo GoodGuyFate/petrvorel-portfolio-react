@@ -156,7 +156,7 @@ function AlbumView({
                 loading={index === 0 ? "eager" : "lazy"}
                 style={{
                   maxWidth: "100%",
-                  maxHeight: "80vh",
+                  maxHeight: "80dvh",
                   objectFit: "contain",
                 }}
               />

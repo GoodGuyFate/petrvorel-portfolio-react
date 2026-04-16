@@ -4,8 +4,8 @@ import Sidebar from "./components/Sidebar";
 import MobileLayout from "./components/MobileLayout";
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => 
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false,
   );
   useEffect(() => {
     const fn = () => setIsMobile(window.innerWidth < 768);
@@ -34,23 +34,28 @@ function App() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    window.history.replaceState({ 
-      view: "paintings-preview", 
-      nav: "paintings", 
-      isPaintings: true,
-      album: null 
-    }, "");
+    window.history.replaceState(
+      {
+        view: "paintings-preview",
+        nav: "paintings",
+        isPaintings: true,
+        album: null,
+      },
+      "",
+    );
   }, []);
 
   useEffect(() => {
     const handlePopState = (event) => {
       if (event.state) {
-        const { view, nav, isPaintings: wasPaintings, album, index } = event.state;
-        setCurrentView(view || "paintings-preview");
-        setActiveNav(nav || "paintings");
-        setIsPaintings(wasPaintings !== undefined ? wasPaintings : true);
-        setCurrentAlbum(album || null); // Fix: Restore the album data on back button
-        setActiveIndex(index || 0);
+        const { view, nav, isPaintings, album } = event.state;
+        setCurrentView(view);
+        setActiveNav(nav);
+        setIsPaintings(isPaintings);
+        if (album) setCurrentAlbum(album);
+      } else {
+        setCurrentView("paintings-preview");
+        setActiveNav("paintings");
       }
     };
 
@@ -60,22 +65,11 @@ function App() {
 
   function navigateTo(view, nav, paintings, album = null) {
     setCurrentView(view);
-    if (nav !== undefined) setActiveNav(nav);
-    if (paintings !== undefined) setIsPaintings(paintings);
-    
-    const targetAlbum = album !== null ? album : currentAlbum;
+    setActiveNav(nav);
+    setIsPaintings(paintings);
+    if (album) setCurrentAlbum(album);
 
-    if (album !== null) {
-      setCurrentAlbum(album);
-      setActiveIndex(0);
-    }
-
-    window.history.pushState({ 
-      view, 
-      nav, 
-      isPaintings: paintings, 
-      album: targetAlbum // Fix: Save album data into history
-    }, "");
+    window.history.pushState({ view, nav, isPaintings: paintings, album }, "");
 
     scrollToTop();
   }

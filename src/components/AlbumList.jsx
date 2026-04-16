@@ -16,6 +16,7 @@ function AlbumList({
   setPhotoCache,
   setIsPaintings,
   navigateTo,
+  isMobile,
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -72,7 +73,13 @@ function AlbumList({
       }
     }
     setCurrentAlbum(photos);
-    navigateTo("album", "photography", false);
+    // On mobile, show the thumbnail grid first so the user can pick a photo.
+    // On desktop, go straight to the swiper as before.
+    if (isMobile) {
+      navigateTo("album-grid", "photography", false);
+    } else {
+      navigateTo("album", "photography", false);
+    }
   }
 
   if (loading)

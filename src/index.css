@@ -52,6 +52,7 @@ body {
 }
 
 .landing-view,
+.photography-view,
 .album-view,
 .contact-view,
 .about-view {
@@ -66,6 +67,7 @@ body {
 }
 
 .landing-view.active,
+.photography-view.active,
 .album-view.active,
 .contact-view.active,
 .about-view.active {
@@ -406,7 +408,100 @@ nav a.active {
   color: #333333;
 }
 
-/* Tablet and up */
+/* ── Sidebar content transitions ── */
+/* Wrap the content area so nav fades independently from the header */
+.sidebar-content {
+  animation: sidebar-fade-in 0.45s ease both;
+}
+
+@keyframes sidebar-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Nav links get a subtle staggered reveal */
+nav a {
+  opacity: 0;
+  animation: nav-reveal 0.35s ease forwards;
+}
+nav a:nth-child(1) { animation-delay: 0.05s; }
+nav a:nth-child(2) { animation-delay: 0.10s; }
+nav a:nth-child(3) { animation-delay: 0.15s; }
+nav a:nth-child(4) { animation-delay: 0.20s; }
+
+@keyframes nav-reveal {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Album list items stagger in */
+.album-item {
+  opacity: 0;
+  animation: item-rise 0.4s ease forwards;
+}
+.album-item:nth-child(1)  { animation-delay: 0.05s; }
+.album-item:nth-child(2)  { animation-delay: 0.10s; }
+.album-item:nth-child(3)  { animation-delay: 0.15s; }
+.album-item:nth-child(4)  { animation-delay: 0.20s; }
+.album-item:nth-child(5)  { animation-delay: 0.25s; }
+.album-item:nth-child(6)  { animation-delay: 0.30s; }
+.album-item:nth-child(7)  { animation-delay: 0.35s; }
+.album-item:nth-child(8)  { animation-delay: 0.40s; }
+.album-item:nth-child(n+9) { animation-delay: 0.45s; }
+
+@keyframes item-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 0.7; transform: translateY(0); }
+}
+.album-item:hover { opacity: 1 !important; }
+
+/* Thumbnail grid fades in as a whole */
+.thumbnail-grid {
+  animation: sidebar-fade-in 0.5s ease both;
+}
+
+/* About / Contact content sections */
+.about-content,
+.contact-form {
+  animation: sidebar-fade-in 0.5s ease both;
+}
+
+/* Back button slides in from left */
+.sidebar-back {
+  animation: nav-reveal 0.3s ease both 0.05s;
+}
+
+/* Nav active underline animates width */
+nav a {
+  position: relative;
+}
+nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #fcc001;
+  transform-origin: left;
+  animation: underline-grow 0.3s ease forwards;
+}
+@keyframes underline-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Remove the old static border-bottom on active so the animated one takes over */
+nav a.active {
+  border-bottom: none;
+  padding-bottom: 0;
+}
 @media (min-width: 768px) {
   body {
     overflow: hidden;
@@ -428,6 +523,3 @@ nav a.active {
     overflow-y: auto;
   }
 }
-
-
-

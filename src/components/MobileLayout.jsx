@@ -11,6 +11,8 @@ function MobileLayout({
   children, // sidebar content
 }) {
   const isAlbumView = currentView === "album";
+  const isAlbumGrid = currentView === "album-grid";
+  const showBack = isAlbumView || isAlbumGrid;
 
   function goBack() {
     window.history.back();
@@ -21,7 +23,7 @@ function MobileLayout({
       {/* ── Top bar ── */}
       <header className="mobile-header">
         <div className="mobile-header-left">
-          {isAlbumView ? (
+          {showBack ? (
             <button className="mobile-back-btn" onClick={goBack}>
               ← BACK
             </button>
@@ -68,7 +70,7 @@ function MobileLayout({
         </div>
       </header>
 
-      {/* ── Album fullscreen viewer ── */}
+      {/* ── Album fullscreen swiper ── */}
       {isAlbumView && currentAlbum ? (
         <div className="mobile-album-view">
           <AlbumView
@@ -81,32 +83,41 @@ function MobileLayout({
         </div>
       ) : (
         <>
-          {/* ── Hero image ── */}
-          <div className="mobile-hero">
-            {currentView === "about" && (
-              <img
-                src="/images/background-about.webp"
-                alt="Petr Vorel"
-                style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center top", display: "block", backgroundColor: "#2a2a2a" }}
-              />
-            )}
-            {currentView === "contact" && (
-              <div
-                className="mobile-hero-bg"
-                style={{ backgroundImage: "url(/images/background-contact.webp)", backgroundPosition: "center", backgroundSize: "cover" }}
-              />
-            )}
-            {(currentView === "landing" || currentView === "paintings-preview") && (
-              <img
-                src="/images/background.webp"
-                alt=""
-                fetchPriority="high"
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
-            )}
-          </div>
+          {/* ── Hero image (hidden on album-grid to maximise grid space) ── */}
+          {!isAlbumGrid && (
+            <div className="mobile-hero">
+              {currentView === "about" && (
+                <img
+                  src="/images/background-about.webp"
+                  alt="Petr Vorel"
+                  style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center top", display: "block", backgroundColor: "#2a2a2a" }}
+                />
+              )}
+              {currentView === "contact" && (
+                <div
+                  className="mobile-hero-bg"
+                  style={{ backgroundImage: "url(/images/background-contact.webp)", backgroundPosition: "center", backgroundSize: "cover" }}
+                />
+              )}
+              {currentView === "paintings-preview" && (
+                <img
+                  src="/images/background.webp"
+                  alt=""
+                  fetchPriority="high"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+              )}
+              {currentView === "landing" && (
+                <img
+                  src="/images/background-photography.webp"
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+              )}
+            </div>
+          )}
 
-          {/* ── Sidebar content (nav + lists) ── */}
+          {/* ── Sidebar content (nav + lists + grids) ── */}
           <div className="mobile-content">
             {children}
           </div>

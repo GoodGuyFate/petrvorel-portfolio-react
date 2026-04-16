@@ -78,6 +78,7 @@ function Sidebar({
   isPaintings,
   setIsPaintings,
   navigateTo,
+  isMobile,
 }) {
   function goToPaintingsPreview() {
     navigateTo("paintings-preview", "paintings", true, null);
@@ -95,6 +96,12 @@ function Sidebar({
     setCurrentAlbum(photos);
     setActiveIndex(index);
     navigateTo("album", "paintings", true);
+  }
+
+  // On mobile album-grid view, tapping a thumbnail goes to the swiper
+  function handleMobileGridThumbClick(index) {
+    setActiveIndex(index);
+    navigateTo("album", "photography", false);
   }
 
   const paintingPhotos = photoCache[FINE_ART_ALBUM_ID] || null;
@@ -157,7 +164,7 @@ function Sidebar({
         </nav>
       </div>
 
-      <div className="sidebar-content">
+      <div className="sidebar-content" key={currentView}>
         {/* Desktop back button only */}
         {currentView === "album" && (
           <div className="sidebar-back desktop-only" onClick={goBack}>
@@ -185,14 +192,25 @@ function Sidebar({
             setPhotoCache={setPhotoCache}
             setIsPaintings={setIsPaintings}
             navigateTo={navigateTo}
+            isMobile={isMobile}
           />
         )}
 
+        {/* Desktop: thumbnail strip while in swiper view */}
         {currentView === "album" && currentAlbum && (
           <ThumbnailGrid
             photos={currentAlbum}
             activeIndex={activeIndex}
             onThumbnailClick={setActiveIndex}
+          />
+        )}
+
+        {/* Mobile: full thumbnail grid before entering swiper */}
+        {currentView === "album-grid" && currentAlbum && (
+          <ThumbnailGrid
+            photos={currentAlbum}
+            activeIndex={-1}
+            onThumbnailClick={handleMobileGridThumbClick}
           />
         )}
 

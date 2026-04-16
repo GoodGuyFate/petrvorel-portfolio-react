@@ -48,7 +48,8 @@ function App() {
         setCurrentView(prev.view);
         setActiveNav(prev.activeNav);
         setIsPaintings(prev.isPaintings);
-        if (prev.view !== "album") {
+        // Keep currentAlbum alive for both album and album-grid views
+        if (prev.view !== "album" && prev.view !== "album-grid") {
           setCurrentAlbum(null);
         }
         scrollToTop();
@@ -100,6 +101,7 @@ function App() {
     isPaintings,
     setIsPaintings,
     navigateTo,
+    isMobile,
   };
 
   if (isMobile) {
@@ -126,6 +128,7 @@ function App() {
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
         isPaintings={isPaintings}
+        activeNav={activeNav}
       />
       <Sidebar {...sidebarProps} />
     </div>

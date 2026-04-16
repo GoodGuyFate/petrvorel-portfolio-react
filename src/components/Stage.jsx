@@ -8,14 +8,20 @@ function Stage({
   activeIndex,
   setActiveIndex,
   isPaintings,
+  activeNav,
 }) {
-  // paintings-preview keeps the hero visible (same as landing)
-  const showHero =
-    currentView === "landing" || currentView === "paintings-preview";
+  // paintings-preview keeps the paintings hero visible
+  const showPaintingsHero =
+    currentView === "paintings-preview";
+
+  // photography landing (album list) — no album open yet
+  const showPhotographyHero =
+    currentView === "landing" && activeNav === "photography";
 
   return (
-    <main className="stage">
-      <div className={`landing-view ${showHero ? "active" : ""}`}>
+    <main className="stage" data-view={currentView}>
+      {/* Paintings hero */}
+      <div className={`landing-view${showPaintingsHero ? " active" : ""}`}>
         <div className="hero">
           <img
             src="/images/background.webp"
@@ -31,7 +37,23 @@ function Stage({
         </div>
       </div>
 
-      <div className={`album-view ${currentView === "album" ? "active" : ""}`}>
+      {/* Photography landing hero */}
+      <div className={`photography-view${showPhotographyHero ? " active" : ""}`}>
+        <div className="hero">
+          <img
+            src="/images/background-photography.webp"
+            alt=""
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        </div>
+      </div>
+
+      <div className={`album-view${currentView === "album" ? " active" : ""}`}>
         <Suspense fallback={null}>
           <AlbumView
             currentAlbum={currentAlbum}
@@ -42,7 +64,7 @@ function Stage({
         </Suspense>
       </div>
 
-      <div className={`about-view ${currentView === "about" ? "active" : ""}`}>
+      <div className={`about-view${currentView === "about" ? " active" : ""}`}>
         <img
           src="/images/background-about.webp"
           alt="Petr Vorel"
@@ -57,7 +79,7 @@ function Stage({
       </div>
 
       <div
-        className={`contact-view ${currentView === "contact" ? "active" : ""}`}
+        className={`contact-view${currentView === "contact" ? " active" : ""}`}
       >
         <div
           className="contact-hero"

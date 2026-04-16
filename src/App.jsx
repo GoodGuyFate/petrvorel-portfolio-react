@@ -17,10 +17,8 @@ function useIsMobile() {
 
 function scrollToTop() {
   window.scrollTo({ top: 0 });
-  // desktop sidebar scroll
   const sidebar = document.querySelector(".sidebar");
   if (sidebar) sidebar.scrollTop = 0;
-  // mobile content scroll
   const mobileContent = document.querySelector(".mobile-content");
   if (mobileContent) mobileContent.scrollTop = 0;
 }
@@ -35,24 +33,23 @@ function App() {
   const [isPaintings, setIsPaintings] = useState(true);
   const isMobile = useIsMobile();
 
-  // 1. Initialize history state on first mount
   useEffect(() => {
     window.history.replaceState({ 
       view: "paintings-preview", 
       nav: "paintings", 
-      isPaintings: true 
+      isPaintings: true,
+      album: null 
     }, "");
   }, []);
 
-  // 2. Handle browser back/forward buttons
   useEffect(() => {
     const handlePopState = (event) => {
       if (event.state) {
-        const { view, nav, isPaintings, album, index } = event.state;
+        const { view, nav, isPaintings: wasPaintings, album, index } = event.state;
         setCurrentView(view || "paintings-preview");
         setActiveNav(nav || "paintings");
-        setIsPaintings(isPaintings !== undefined ? isPaintings : true);
-        setCurrentAlbum(album || null);
+        setIsPaintings(wasPaintings !== undefined ? wasPaintings : true);
+        setCurrentAlbum(album || null); // Fix: Restore the album data on back button
         setActiveIndex(index || 0);
       }
     };
@@ -61,23 +58,23 @@ function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  // 3. Centralized Navigation
   function navigateTo(view, nav, paintings, album = null) {
     setCurrentView(view);
     if (nav !== undefined) setActiveNav(nav);
     if (paintings !== undefined) setIsPaintings(paintings);
     
+    const targetAlbum = album !== null ? album : currentAlbum;
+
     if (album !== null) {
       setCurrentAlbum(album);
       setActiveIndex(0);
     }
 
-    // Push to browser history so the back button works
     window.history.pushState({ 
       view, 
       nav, 
       isPaintings: paintings, 
-      album 
+      album: targetAlbum // Fix: Save album data into history
     }, "");
 
     scrollToTop();
@@ -88,10 +85,6 @@ function App() {
     setActiveIndex(0);
     scrollToTop();
   }
-
-  useEffect(() => {
-    scrollToTop();
-  }, [currentView]);
 
   const sidebarProps = {
     currentView,

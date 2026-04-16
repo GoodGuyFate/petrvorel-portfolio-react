@@ -21,21 +21,29 @@ function getPhotoUrl(photo) {
   );
 }
 
-function AlbumView({ currentAlbum, activeIndex, setActiveIndex, isPaintings, isMobile }) {
+function AlbumView({
+  currentAlbum,
+  activeIndex,
+  setActiveIndex,
+  isPaintings,
+  isMobile,
+}) {
   const swiperRef = useRef(null);
-  const [counter, setCounter] = useState("1");
+  const [counter, setCounter] = useState(
+    currentAlbum ? `${activeIndex + 1} of ${currentAlbum.length}` : "",
+  );
 
   useEffect(() => {
     if (swiperRef.current && activeIndex !== undefined) {
-      swiperRef.current.slideTo(activeIndex);
+      swiperRef.current.slideTo(activeIndex, 0);
     }
   }, [activeIndex]);
 
   useEffect(() => {
     if (currentAlbum && currentAlbum.length > 0) {
-      setCounter(`1 of ${currentAlbum.length}`);
+      setCounter(`${activeIndex + 1} of ${currentAlbum.length}`);
     }
-  }, [currentAlbum]);
+  }, [activeIndex, currentAlbum]);
 
   if (!currentAlbum || currentAlbum.length === 0) return null;
 
@@ -46,7 +54,14 @@ function AlbumView({ currentAlbum, activeIndex, setActiveIndex, isPaintings, isM
   if (isMobile) {
     // Mobile: flex column — swiper fills space, caption below
     return (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Swiper
           modules={[Keyboard]}
           keyboard={{ enabled: true }}
@@ -60,14 +75,16 @@ function AlbumView({ currentAlbum, activeIndex, setActiveIndex, isPaintings, isM
         >
           {currentAlbum.map((photo, index) => (
             <SwiperSlide key={photo.id}>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                height: "100%",
-                padding: "0.75rem",
-              }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "100%",
+                  padding: "0.75rem",
+                }}
+              >
                 <img
                   src={getPhotoUrl(photo)}
                   alt={photo.title}
@@ -85,10 +102,21 @@ function AlbumView({ currentAlbum, activeIndex, setActiveIndex, isPaintings, isM
         </Swiper>
 
         {/* Caption row — below swiper, never overlapping */}
-        <div className="swiper-caption" style={{ position: "static", padding: "0.6rem 1rem 1rem", flexShrink: 0 }}>
+        <div
+          className="swiper-caption"
+          style={{
+            position: "static",
+            padding: "0.6rem 1rem 1rem",
+            flexShrink: 0,
+          }}
+        >
           {isPaintings && title && <span id="photo-title">{title}</span>}
-          {isPaintings && description && <span id="photo-subtitle">{description}</span>}
-          <span id="photo-counter">{counter || `1 of ${currentAlbum.length}`}</span>
+          {isPaintings && description && (
+            <span id="photo-subtitle">{description}</span>
+          )}
+          <span id="photo-counter">
+            {counter || `1 of ${currentAlbum.length}`}
+          </span>
         </div>
       </div>
     );
@@ -98,6 +126,7 @@ function AlbumView({ currentAlbum, activeIndex, setActiveIndex, isPaintings, isM
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <Swiper
+        initialSlide={activeIndex}
         modules={[Keyboard]}
         keyboard={{ enabled: true }}
         speed={800}

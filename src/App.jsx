@@ -4,14 +4,17 @@ import Sidebar from "./components/Sidebar";
 import MobileLayout from "./components/MobileLayout";
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 768 : false,
+  const [isMobile, setIsMobile] = useState(() => 
+    // Increased from 768 to 1024 to catch vertical tablets
+    typeof window !== "undefined" ? window.innerWidth <= 1024 : false
   );
+  
   useEffect(() => {
-    const fn = () => setIsMobile(window.innerWidth < 768);
+    const fn = () => setIsMobile(window.innerWidth <= 1024);
     window.addEventListener("resize", fn);
     return () => window.removeEventListener("resize", fn);
   }, []);
+  
   return isMobile;
 }
 

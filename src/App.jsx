@@ -4,7 +4,9 @@ import Sidebar from "./components/Sidebar";
 import MobileLayout from "./components/MobileLayout";
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
   useEffect(() => {
     const fn = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", fn);
@@ -31,48 +33,54 @@ function App() {
   const [albums, setAlbums] = useState([]);
   const [photoCache, setPhotoCache] = useState({});
   const [isPaintings, setIsPaintings] = useState(true);
-  const [viewHistory, setViewHistory] = useState([]);
   const isMobile = useIsMobile();
 
+  // 1. Initialize history state on first mount
   useEffect(() => {
-    window.history.pushState({ view: "paintings-preview" }, "");
+    window.history.replaceState({ 
+      view: "paintings-preview", 
+      nav: "paintings", 
+      isPaintings: true 
+    }, "");
   }, []);
 
+  // 2. Handle browser back/forward buttons
   useEffect(() => {
-    function handlePopState() {
-      window.history.pushState({ view: currentView }, "");
-
-      if (viewHistory.length > 0) {
-        const prev = viewHistory[viewHistory.length - 1];
-        setViewHistory((h) => h.slice(0, -1));
-        setCurrentView(prev.view);
-        setActiveNav(prev.activeNav);
-        setIsPaintings(prev.isPaintings);
-        // Keep currentAlbum alive for both album and album-grid views
-        if (prev.view !== "album" && prev.view !== "album-grid") {
-          setCurrentAlbum(null);
-        }
-        scrollToTop();
+    const handlePopState = (event) => {
+      if (event.state) {
+        const { view, nav, isPaintings, album, index } = event.state;
+        setCurrentView(view || "paintings-preview");
+        setActiveNav(nav || "paintings");
+        setIsPaintings(isPaintings !== undefined ? isPaintings : true);
+        setCurrentAlbum(album || null);
+        setActiveIndex(index || 0);
       }
-    }
+    };
+
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [viewHistory, currentView]);
+  }, []);
 
+  // 3. Centralized Navigation
   function navigateTo(view, nav, paintings, album = null) {
-    setViewHistory((h) => [
-      ...h,
-      { view: currentView, activeNav, isPaintings },
-    ]);
     setCurrentView(view);
     if (nav !== undefined) setActiveNav(nav);
     if (paintings !== undefined) setIsPaintings(paintings);
+    
     if (album !== null) {
       setCurrentAlbum(album);
       setActiveIndex(0);
     }
+
+    // Push to browser history so the back button works
+    window.history.pushState({ 
+      view, 
+      nav, 
+      isPaintings: paintings, 
+      album 
+    }, "");
+
     scrollToTop();
-    window.history.pushState({ view }, "");
   }
 
   function handleSetCurrentAlbum(photos) {

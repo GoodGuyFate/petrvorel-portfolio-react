@@ -1,5 +1,11 @@
 import AlbumView from "./AlbumView";
 
+// Hero images come in four widths (see make-hero-sizes.mjs). The browser picks the
+// smallest one that still looks sharp on the visitor's screen.
+const HERO_WIDTHS = [720, 1080, 1600, 2048];
+const heroSrcSet = (name) =>
+  HERO_WIDTHS.map((w) => `/images/${name}-${w}.webp ${w}w`).join(", ");
+
 function MobileLayout({
   currentView,
   currentAlbum,
@@ -17,8 +23,7 @@ function MobileLayout({
   function goBack() {
     if (currentView === "album") {
       navigateTo("album-grid", "photography", false);
-    }
-    else if (currentView === "album-grid") {
+    } else if (currentView === "album-grid") {
       navigateTo("landing", "photography", false);
     }
   }
@@ -81,20 +86,20 @@ function MobileLayout({
             </svg>
           </a>
           <a
-              href="https://www.flickr.com/photos/petrvorel"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Flickr"
-              className="mobile-social-link"
+            href="https://www.flickr.com/photos/petrvorel"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Flickr"
+            className="mobile-social-link"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M0 12c0 3.314 2.686 6 6 6s6-2.686 6-6-2.686-6-6-6-6 2.686-6 6zm12 0c0 3.314 2.686 6 6 6s6-2.686 6-6-2.686-6-6-6-6 2.686-6 6z" />
-              </svg>
-            </a>
+              <path d="M0 12c0 3.314 2.686 6 6 6s6-2.686 6-6-2.686-6-6-6-6 2.686-6 6zm12 0c0 3.314 2.686 6 6 6s6-2.686 6-6-2.686-6-6-6-6 2.686-6 6z" />
+            </svg>
+          </a>
         </div>
       </header>
 
@@ -116,7 +121,9 @@ function MobileLayout({
             <div className="mobile-hero">
               {currentView === "about" && (
                 <img
-                  src="/images/background-about.webp"
+                  src="/images/background-about-1080.webp"
+                  srcSet={heroSrcSet("background-about")}
+                  sizes="100vw"
                   alt="Petr Vorel"
                   style={{
                     width: "100%",
@@ -129,18 +136,19 @@ function MobileLayout({
                 />
               )}
               {currentView === "contact" && (
-                <div
-                  className="mobile-hero-bg"
-                  style={{
-                    backgroundImage: "url(/images/background-contact.webp)",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                  }}
+                <img
+                  src="/images/background-contact-1080.webp"
+                  srcSet={heroSrcSet("background-contact")}
+                  sizes="100vw"
+                  alt=""
+                  style={{ objectPosition: "center" }}
                 />
               )}
               {currentView === "paintings-preview" && (
                 <img
-                  src="/images/background.webp"
+                  src="/images/background-1080.webp"
+                  srcSet={heroSrcSet("background")}
+                  sizes="100vw"
                   alt=""
                   fetchPriority="high"
                   style={{
@@ -153,7 +161,9 @@ function MobileLayout({
               )}
               {currentView === "landing" && (
                 <img
-                  src="/images/background-photography.webp"
+                  src="/images/background-photography-1080.webp"
+                  srcSet={heroSrcSet("background-photography")}
+                  sizes="100vw"
                   alt=""
                   style={{
                     width: "100%",

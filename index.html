@@ -13,10 +13,31 @@
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' ry='18' fill='%23111'/%3E%3Ctext x='50' y='74' font-family='Georgia%2C serif' font-size='62' font-weight='700' text-anchor='middle' fill='%23c9a84c' letter-spacing='-2'%3EV%3C/text%3E%3C/svg%3E"
     />
+
+    <!-- Thumbnails come from Flickr: open the connection early. If your Lighthouse
+         report shows other farmNN hosts, add a line for each. -->
+    <link rel="preconnect" href="https://farm66.staticflickr.com" />
+
+    <!-- Phones and tablets (the mobile layout, up to 1024px): preload the hero in the
+         size this screen needs. srcset and sizes must match MobileLayout.jsx exactly,
+         or the browser downloads the image twice. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/background-1080.webp"
+      imagesrcset="/images/background-720.webp 720w, /images/background-1080.webp 1080w, /images/background-1600.webp 1600w, /images/background-2048.webp 2048w"
+      imagesizes="100vw"
+      media="(max-width: 1024px)"
+      fetchpriority="high"
+    />
+
+    <!-- Desktop: same as before, now limited to desktop widths. If the desktop layout
+         does not use background.webp, delete this line. -->
     <link
       rel="preload"
       as="image"
       href="/images/background.webp"
+      media="(min-width: 1025px)"
       fetchpriority="high"
     />
   </head>

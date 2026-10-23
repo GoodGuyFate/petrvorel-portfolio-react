@@ -223,17 +223,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Mobile hero image fades in on view change */
-  .mobile-hero img,
-  .mobile-hero .mobile-hero-bg {
-    animation: hero-fade 0.5s ease both;
-  }
-
-  @keyframes hero-fade {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
   /* Mobile album view fades in */
   .mobile-album-view {
     animation: mobile-fade-in 0.35s ease both;

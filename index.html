@@ -14,6 +14,18 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' ry='18' fill='%23111'/%3E%3Ctext x='50' y='74' font-family='Georgia%2C serif' font-size='62' font-weight='700' text-anchor='middle' fill='%23c9a84c' letter-spacing='-2'%3EV%3C/text%3E%3C/svg%3E"
     />
 
+    <!-- Paint the real background straight away instead of a white flash while the
+         app downloads. Matches body in index.css. -->
+    <style>
+      html {
+        background: #333333;
+      }
+    </style>
+
+    <!-- Fonts used on the first screen: start them now instead of after the CSS is read. -->
+    <link rel="preload" href="/fonts/Cinzel-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Raleway-Bold.woff2" as="font" type="font/woff2" crossorigin />
+
     <!-- Thumbnails come from Flickr: open the connection early. If your Lighthouse
          report shows other farmNN hosts, add a line for each. -->
     <link rel="preconnect" href="https://farm66.staticflickr.com" />
